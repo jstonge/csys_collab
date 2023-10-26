@@ -11,7 +11,6 @@ from collections import Counter
 import pandas as pd
 from helpers import analyze_collaborations
 
-np.loadtxt("csys_graph/collab_2000.txt")
 
 # plt.switch_backend("cairo")
 sns.set_style("white")
@@ -68,7 +67,7 @@ papers = get_papers()
 # paper1993 = [p for p in papers if p.get('year') and p['year'] == 1993]
 
 collab_dict, lab = analyze_collaborations(papers, thresh_nb_auth=20)
-
+import csv
 # Q: whatsup with 1993?
 # A: there were 4 papers but one with 55 coauthors...we put a threshold
 [(y, f"#papers: {len(create_edgelist(collab_dict, years=[y]))}") for y in range(1990, 2023)]
@@ -77,6 +76,11 @@ collab_dict, lab = analyze_collaborations(papers, thresh_nb_auth=20)
 for yr in range(2000, 2023):
   edgelist = create_edgelist(collab_dict, years=[yr])
  
+  with open(f"csys_graph/edgelist_{yr}.txt", 'w', newline='') as csvfile:
+      csvwriter = csv.writer(csvfile)
+      csvwriter.writerows(edgelist)
+    
+
   g = create_graph()
 
   np.savetxt(f"csys_graph/collab_{yr}.txt",gt.adjacency(g).todense())
