@@ -67,7 +67,12 @@ papers = get_papers()
 # paper1993 = [p for p in papers if p.get('year') and p['year'] == 1993]
 
 collab_dict, lab = analyze_collaborations(papers, thresh_nb_auth=20)
+
 import csv
+
+with open('authorId2name.json', 'w') as f:
+    json.dump(lab, f)
+
 # Q: whatsup with 1993?
 # A: there were 4 papers but one with 55 coauthors...we put a threshold
 [(y, f"#papers: {len(create_edgelist(collab_dict, years=[y]))}") for y in range(1990, 2023)]
@@ -76,14 +81,13 @@ import csv
 for yr in range(2000, 2023):
   edgelist = create_edgelist(collab_dict, years=[yr])
  
-  with open(f"csys_graph/edgelist_{yr}.txt", 'w', newline='') as csvfile:
-      csvwriter = csv.writer(csvfile)
-      csvwriter.writerows(edgelist)
+  # with open(f"csys_graph/edgelist_{yr}.txt", 'w', newline='') as csvfile:
+  #     csvwriter = csv.writer(csvfile)
+  #     csvwriter.writerows(edgelist)
     
-
   g = create_graph()
 
-  np.savetxt(f"csys_graph/collab_{yr}.txt",gt.adjacency(g).todense())
+  # np.savetxt(f"csys_graph/collab_{yr}.txt",gt.adjacency(g).todense())
 
   # check vertex properties
   # [(g.vp['ids'][v], g.vp['label'][v], g.vp['is_core'][v]) for v in g.vertices()]
